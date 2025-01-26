@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planetary Motion</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+</head>
+<body>
+<script>
+    let planets = [];
+
+    function setup() {
+        createCanvas(800, 800);
+        angleMode(DEGREES);
+        // Define the sun
+        let sun = {
+            x: width / 2,
+            y: height / 2,
+            radius: 50,
+            color: 'yellow'
+        };
+
+        // Add planets (distance, size, speed, color)
+        planets.push(new Planet(sun, 100, 15, 1, 'blue'));   // Earth-like
+        planets.push(new Planet(sun, 150, 20, 0.8, 'red'));  // Mars-like
+        planets.push(new Planet(sun, 200, 10, 1.5, 'green')); // Mercury-like
+
+        noStroke();
+        planets.forEach(planet => planet.setSun(sun));
+    }
+
+    function draw() {
+        background(0);
+
+        // Draw the sun
+        fill('yellow');
+        ellipse(width / 2, height / 2, 100, 100);
+
+        // Update and draw planets
+        planets.forEach(planet => {
+            planet.update();
+            planet.show();
+        });
+    }
+
+    class Planet {
+        constructor(sun, orbitRadius, size, speed, color) {
+            this.sun = sun;
+            this.orbitRadius = orbitRadius;
+            this.size = size;
+            this.speed = speed;
+            this.angle = random(360); // Random starting position
+            this.color = color;
+        }
+
+        setSun(sun) {
+            this.sun = sun;
+        }
+
+        update() {
+            this.angle += this.speed; // Update position based on speed
+        }
+
+        show() {
+            let x = this.sun.x + this.orbitRadius * cos(this.angle);
+            let y = this.sun.y + this.orbitRadius * sin(this.angle);
+            fill(this.color);
+            ellipse(x, y, this.size);
+        }
+    }
+</script>
+</body>
+</html>
